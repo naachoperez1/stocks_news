@@ -1,26 +1,6 @@
 import requests
 import os
 from twilio.rest import Client
-## STEP 1: Use https://www.alphavantage.co
-# When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
-
-## STEP 2: Use https://newsapi.org
-# Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
-
-## STEP 3: Use https://www.twilio.com
-# Send a seperate message with the percentage change and each article's title and description to your phone number. 
-
-
-#Optional: Format the SMS message like this: 
-"""
-TSLA: 🔺2%
-Headline: Were Hedge Funds Right About Piling Into Tesla Inc. (TSLA)?. 
-Brief: We at Insider Monkey have gone over 821 13F filings that hedge funds and prominent investors are required to file by the SEC The 13F filings show the funds' and investors' portfolio positions as of March 31st, near the height of the coronavirus market crash.
-or
-"TSLA: 🔻5%
-Headline: Were Hedge Funds Right About Piling Into Tesla Inc. (TSLA)?. 
-Brief: We at Insider Monkey have gone over 821 13F filings that hedge funds and prominent investors are required to file by the SEC The 13F filings show the funds' and investors' portfolio positions as of March 31st, near the height of the coronavirus market crash.
-"""
 
 ############################# STOCKS GETTER #############################
 EMPRESA = 'microsoft'
@@ -80,16 +60,15 @@ def get_diff():
 lista = peticion_news['articles']
 titulares = [noticia['title'] for noticia in lista[:3]]
 noticias = [noticia['description'] for noticia in lista[:3]]
-# for i in range(3):
-#     print(f"{titulares[i]}\n {noticias[i]}")
+
 
 ################################## SMS ##################################
-account_sid = "AC9034b05209dd0d21330a032ffcd2cf64"
-auth_token = 'c5f1bba9b4fd4876c269cd2d100634a0'
+account_sid = "YOUR_APIKEY_HERE"
+auth_token = 'YOUR_TOKEN_HERE'
 client = Client(account_sid, auth_token)
 message = client.messages.create(
       body=f"{STOCK}:{get_diff()}.\n{titulares[0]}.\n {noticias[0]}.\n{titulares[1]}."
            f"\n{noticias[1]}.\n{titulares[2]}.\n{noticias[2]}.",
-      from_="+15076667886",
-      to="+543564647541"
+      from_="YOUR_TWILLIO_NUMBER",
+      to="YOUR_CELLPHONE_NUMBER"
 )
